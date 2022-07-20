@@ -1,1 +1,1 @@
-from ._conn import _conn
+from .conn import _conn
