@@ -3,7 +3,7 @@ import time
 from typing import *
 
 
-with open('../resource/config', 'r') as f:
+with open('./resource/config', 'r') as f:
     BAIDU_BOOL = json.load(f)
 
 # cookie文件头，最后一步手工生成cookie会用得到
@@ -35,9 +35,9 @@ class Cookie:
                 BAIDU_BOOL[host_key][1]) + '\t' + str(creation_utc) + '\t' + str(name) + '\t' + str(value)
             print(cookieContent)
 
-    def getOutFile(self, path: str = '../log/'):
+    def getOutFile(self, path: str = './log/'):
         '''将cookie封装进文件'''
-        with open(path + 'Cookie'+str(int(time.time())), 'w') as f:
+        with open(path + 'Cookie'+str(int(time.time())) + '.log', 'w') as f:
             # 写入头
             f.write(COOKIE_HEADER)
 
