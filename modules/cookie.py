@@ -23,16 +23,16 @@ class Cookie:
         '''将cookie封装成生成器对象，通过next()函数调用'''
         for i in self.cookieList:
             creation_utc, host_key, name, value, path = i
-            cookieContent = str(host_key) + '\t' + str(BAIDU_BOOL[host_key][0]) + '\t' + str(path) + '\t' + str(
-                BAIDU_BOOL[host_key][1]) + '\t' + str(creation_utc) + '\t' + str(name) + '\t' + str(value) + '\n'
+            cookieContent = str(host_key) + '\t' + str(BAIDU_BOOL[host_key][0] if host_key in BAIDU_BOOL.keys() else 'FALSE') + '\t' + str(path) + '\t' + str(
+                BAIDU_BOOL[host_key][1] if host_key in BAIDU_BOOL.keys() else 'FALSE') + '\t' + str(creation_utc) + '\t' + str(name) + '\t' + str(value)
             yield cookieContent
 
     def getAll(self):
         '''将cookie所有内容输出到控制台'''
         for i in self.cookieList:
             creation_utc, host_key, name, value, path = i
-            cookieContent = str(host_key) + '\t' + str(BAIDU_BOOL[host_key][0]) + '\t' + str(path) + '\t' + str(
-                BAIDU_BOOL[host_key][1]) + '\t' + str(creation_utc) + '\t' + str(name) + '\t' + str(value)
+            cookieContent = str(host_key) + '\t' + str(BAIDU_BOOL[host_key][0] if host_key in BAIDU_BOOL.keys() else 'FALSE') + '\t' + str(path) + '\t' + str(
+                BAIDU_BOOL[host_key][1] if host_key in BAIDU_BOOL.keys() else 'FALSE') + '\t' + str(creation_utc) + '\t' + str(name) + '\t' + str(value)
             print(cookieContent)
 
     def getOutFile(self, path: str = './log/'):
@@ -44,7 +44,6 @@ class Cookie:
             # 写入体
             for i in self.cookieList:
                 creation_utc, host_key, name, value, path = i
-                cookieContent = str(host_key) + '\t' + str(BAIDU_BOOL[host_key][0]) + '\t' + str(path) + '\t' + \
-                    str(BAIDU_BOOL[host_key][1]) + '\t' + str(creation_utc) + \
-                    '\t' + str(name) + '\t' + str(value) + '\n'
+                cookieContent = str(host_key) + '\t' + str(BAIDU_BOOL[host_key][0] if host_key in BAIDU_BOOL.keys() else 'FALSE') + '\t' + str(path) + '\t' + str(
+                    BAIDU_BOOL[host_key][1] if host_key in BAIDU_BOOL.keys() else 'FALSE') + '\t' + str(creation_utc) + '\t' + str(name) + '\t' + str(value) + '\n'
                 f.write(cookieContent)
