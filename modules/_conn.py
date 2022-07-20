@@ -1,11 +1,10 @@
 import sqlite3
-import os
 from typing import *
 
 from pygame import Cursor
 
 
-class _conn(sqlite3.Connection):
+class _Conn(sqlite3.Connection):
     def __init__(self, path) -> None:
         super().__init__(path)
         self._path = path
