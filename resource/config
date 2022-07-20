@@ -90,5 +90,9 @@
     ".zhidao.baidu.com": [
         "FALSE",
         "FALSE"
+    ],
+    "map.baidu.com": [
+        "FALSE",
+        "FALSE"
     ]
 }
