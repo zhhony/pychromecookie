@@ -94,5 +94,13 @@
     "map.baidu.com": [
         "FALSE",
         "FALSE"
+    ],
+    ".csdn.net": [
+        "TRUE",
+        "FALSE"
+    ],
+    ".www.csdn.net": [
+        "TRUE",
+        "FALSE"
     ]
 }
