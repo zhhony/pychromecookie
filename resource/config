@@ -1,0 +1,94 @@
+{
+    ".baidu.com": [
+        "TRUE",
+        "FALSE"
+    ],
+    ".passport.baidu.com": [
+        "TRUE",
+        "TRUE"
+    ],
+    "passport.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    "www.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".hm.baidu.com": [
+        "TRUE",
+        "FALSE"
+    ],
+    ".www.baidu.com": [
+        "TRUE",
+        "FALSE"
+    ],
+    ".wenku.baidu.com": [
+        "TRUE",
+        "TRUE"
+    ],
+    ".miao.baidu.com": [
+        "TRUE",
+        "FALSE"
+    ],
+    "wenku.baidu.com": [
+        "FALSE",
+        "TRUE"
+    ],
+    ".pan.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    "pan.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".jingyan.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".baike.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    "baike.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".b2b.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".tongji.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".bce.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".developer.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".lewan.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".haokan.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".tieba.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".live.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ],
+    ".zhidao.baidu.com": [
+        "FALSE",
+        "FALSE"
+    ]
+}
