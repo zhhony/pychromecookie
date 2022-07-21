@@ -4,7 +4,7 @@ from http.cookiejar import *
 import time
 import ssl
 import gzip
-import re
+import os
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -51,10 +51,8 @@ request = Request(url, headers=headers, method='GET')
 response = opener.open(request)
 data = response.read()
 
-with open(r"C:\Users\zhhony\Desktop\Untitled-1.html", 'wb') as f:
+with open(os.environ['USERPROFILE'] + r"\Desktop\Untitled-1.html", 'wb') as f:
     f.write(gzip.decompress(data))
 
 cookie_jar.save('./log/Cookie'+str(int(time.time())) + '.log',
                 ignore_discard=True, ignore_expires=True)
-
-time.localtime(1657264223)
