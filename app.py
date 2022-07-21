@@ -59,5 +59,9 @@ for url in urlList:
     title=re.findall(paraTitle, html)
     data.append(title)
 
+with open(os.environ['USERPROFILE'] + r"\Desktop\Untitled-1.html", 'w') as f:
+    f.write(html)
+
+
 cookie_jar.save('./log/Cookie'+str(int(time.time())) + '.log',
                 ignore_discard=True, ignore_expires=True)
