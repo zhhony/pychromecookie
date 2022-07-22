@@ -6,6 +6,14 @@ import ssl
 import gzip
 import os
 import re
+import pandas
+from bs4 import *
+from py_test_tools import *
+
+
+pandas.set_option('display.unicode.east_asian_width', True)
+pandas.set_option('display.unicode.ambiguous_as_wide', True)
+
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
@@ -67,8 +75,16 @@ for url in urlList:
         data.append(list(i.group('url', 'title', 'time')))
 
 
-# with open(os.environ['USERPROFILE'] + r"\Desktop\Untitled-1.html", 'w') as f:
-#     f.write(html)
-
 # cookie_jar.save('./log/Cookie'+str(int(time.time())) + '.log',
 #                 ignore_discard=True, ignore_expires=True)
+
+
+# 将data存储的相对地址改为绝对地址
+for i in range(len(data)):
+    data[i][0] = urljoin(urlList[0], data[i][0])
+
+# 将data对象转为pandas.DataFrame对象方便输出
+df = pandas.DataFrame(data=data, columns=['网址', '标题', '发布时间'])
+df.to_excel('./log/output'+str(int(time.time())) + '.xlsx')
+
+dict.update
