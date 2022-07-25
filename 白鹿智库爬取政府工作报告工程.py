@@ -1,16 +1,13 @@
-import gzip
-import os
-import re
 import ssl
-import time
+import pandas
+import pathlib
 from http.cookiejar import *
-from urllib import response
 from urllib.parse import *
 from urllib.request import *
-from modules.download import *
-import pandas
 from bs4 import *
-from py_test_tools import *
+
+from modules.download import *
+
 
 # 常用参数设置
 pandas.set_option('display.unicode.east_asian_width', True)
@@ -69,30 +66,23 @@ for reportUrl, reportTitle in list(reportUrlDict.items()):
     reportresponse = opener.open(reportrequest)
     reportList.append((reportresponse, reportTitle))
 
-# PS:一个账户只有50次进入报告祥览的机会,所以先将文件保存下来以备后用
+# PS:一个账户只有50次进入报告详览的机会,所以先将文件保存下来以备后用
 for response, title in reportList:
     reportHtml = response.read().decode('utf8')
     with open('./out/' + str(title) + '.log', 'w') as f:
         f.write(reportHtml)
 
+outPath = pathlib.Path('./out')
+outPathFile = [i for i in outPath.glob('**/*.log')]
 
-pycls()
-for year in range(2020, 2021):
-    with open(f'out/{year}年全国政府工作报告（全文）.log', 'r') as f:
+for file in outPathFile:
+    with open(file, 'r') as f:
         reportSoup = BeautifulSoup(f, 'lxml')
-        with open(f'out/{year}年政府工作报告.txt', 'w') as e:
-            [e.write(str(j.string)+'\n')
-             for j in reportSoup.find_all('p', style=True)]
-
-year = 2022
-with open(f'out/{year}年政府工作报告.log', 'r') as f:
-    reportSoup = BeautifulSoup(f, 'lxml')
-    downloadUrl = reportSoup.find_all(
-        'a', style=True, target=False)[0].get('href')
-    Downunit(downloadUrl, f'out/{year}年政府工作报告.pdf').Download()
-
-
-a = 'http://image.bailuzhiku.com/editor/file/a1eb2330b98c450db1857e5ea6ed58e6.pdf'
-re = Request(url = a)
-re = urlopen(re)
-dict(re.headers)
+        if reportSoup.find_all('a', style=True, target=False) == []:
+            with open(str(file)+'.txt', 'w') as e:
+                [e.write(str(j.string)+'\n')
+                 for j in reportSoup.find_all('p', style=True)]
+        else:
+            downloadUrl = reportSoup.find_all(
+                'a', style=True, target=False)[0].get('href')
+            Downunit(downloadUrl, str(file)+'.pdf').Download()
