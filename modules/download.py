@@ -9,25 +9,25 @@ class Downunit():
         self.url = url
         self.path = path
         self.threadnum = threadnum
-        self.file.CONTENT_LENGTH = 0
+        self.CONTENT_LENGTH = 0
         self.headers = {}
 
     def Download(self):
         request = Request(url=self.url, headers=self.headers)
         self.file = urlopen(request)
-        self.file.CONTENT_LENGTH = dict(
-            self.file.headers).get('Content-Length', 0)
+        self.CONTENT_LENGTH = int(dict(
+            self.file.headers).get('Content-Length', 0))
         self.file.close()
 
-        unitBox = self.file.CONTENT_LENGTH//self.threadnum + 1  # 每个线程所负责的下载大小
+        unitBox = self.CONTENT_LENGTH//self.threadnum + 1  # 每个线程所负责的下载大小
 
         for i in range(self.threadnum):
             os_Start = i * unitBox  # 下载的起点
 
-            with open(self.path, 'wb') as f:
-                f.seek(os_Start, 0)
-                td = DownThread(self.url, self.headers, f, os_Start, unitBox)
-                td.start
+            f = open(self.path, 'wb')
+            f.seek(os_Start, 0)
+            td = DownThread(self.url, self.headers, f, os_Start, unitBox)
+            td.start()
 
 
 class DownThread(threading.Thread):
@@ -50,8 +50,9 @@ class DownThread(threading.Thread):
         lenth = 0
         while lenth < self.unitBox:
             page = f.read(1024)
-            if page is None or page <= 0:
+            if page is None or len(page) <= 0:
                 break
             self.file.write(page)
             lenth += len(page)
         f.close()
+        self.file.close()
