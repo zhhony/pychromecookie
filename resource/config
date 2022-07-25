@@ -106,5 +106,9 @@
     ".stats.gov.cn": [
         "TRUE",
         "FALSE"
+    ],
+    ".bailuzhiku.com": [
+        "TRUE",
+        "FALSE"
     ]
 }

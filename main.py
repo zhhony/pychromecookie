@@ -7,10 +7,10 @@ CHROME_COOKIE_PATH = r'\Google\Chrome\User Data\Default\network\Cookies'
 CHROME_LOCALSTATE_PATH = r'\Google\Chrome\User Data\Local State'
 
 path = os.environ['LOCALAPPDATA']
-dbCookies = path + CHROME_COOKIE_PATH  # cookie文件，本质是一个sqlite数据库
+dbCookies = path + CHROME_COOKIE_PATH  # cookie文件，本质是一个SQlite数据库
 fileLocalState = path + CHROME_LOCALSTATE_PATH  # 存储密钥的文件，本质是一个Json文件
 
-KEY_WORD = r'%stats%'
+KEY_WORD = r'%bailuzhiku%'
 
 with Conn(dbCookies) as cur:
     sql = """select creation_utc,host_key,name,encrypted_value,path from cookies where host_key like '%s'""" % KEY_WORD
