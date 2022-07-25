@@ -7,7 +7,7 @@ from http.cookiejar import *
 from urllib import response
 from urllib.parse import *
 from urllib.request import *
-
+from modules.download import *
 import pandas
 from bs4 import *
 from py_test_tools import *
@@ -76,8 +76,23 @@ for response, title in reportList:
         f.write(reportHtml)
 
 
-def Download(url):
-    ...
+pycls()
+for year in range(2020, 2021):
+    with open(f'out/{year}年全国政府工作报告（全文）.log', 'r') as f:
+        reportSoup = BeautifulSoup(f, 'lxml')
+        with open(f'out/{year}年政府工作报告.txt', 'w') as e:
+            [e.write(str(j.string)+'\n')
+             for j in reportSoup.find_all('p', style=True)]
 
-    reportSoup = BeautifulSoup(html, 'lxml')
-    [print(i) for i in reportSoup.find_all('a')]
+year = 2022
+with open(f'out/{year}年政府工作报告.log', 'r') as f:
+    reportSoup = BeautifulSoup(f, 'lxml')
+    downloadUrl = reportSoup.find_all(
+        'a', style=True, target=False)[0].get('href')
+    Downunit(downloadUrl, f'out/{year}年政府工作报告.pdf').Download()
+
+
+a = 'http://image.bailuzhiku.com/editor/file/a1eb2330b98c450db1857e5ea6ed58e6.pdf'
+re = Request(url = a)
+re = urlopen(re)
+dict(re.headers)
