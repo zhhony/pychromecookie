@@ -2,12 +2,10 @@ import pandas
 import os
 import jieba
 import jieba.analyse as analyse
-import json
+import jieba.posseg as posseg
+import paddle
 from pathlib import Path
-from simplejson import loads
-from yaml import load
 from zhon.hanzi import punctuation
-from datetime import datetime
 from yonghong.script.port import EntryPoint, ResourceType
 from typing import *
 
@@ -15,46 +13,74 @@ from typing import *
 pandas.set_option('display.unicode.east_asian_width', True)
 pandas.set_option('display.unicode.ambiguous_as_wide', True)
 
-LOCAL_USER_PROFILE = os.environ['USERPROFILE']
 
-path = Path(LOCAL_USER_PROFILE + '/Desktop/新建文件夹')
+def replace_(text: str, *args) -> str:
+    '''用于将文本中多余的字符去掉，*args支持自定义添加'''
 
+    # 构建替换关键字
+    replaceList = ['\n', '\r', '\xa0', '/']
+    for i in range(10):
+        replaceList.append(str(i))
+    for i in punctuation:
+        replaceList.append(i)
+    for i in args:
+        replaceList.append(i)
 
-def replace_(text: str) -> str:
-    replaceList = ['\n', '\r', '\xa0', '/', '和', '的',
-                   '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    [replaceList.append(i) for i in punctuation]
+    # 替换文本
     for i in replaceList:
         text = text.replace(i, '')
     return text
 
 
-fileList = [i for i in path.glob('**/*')]
+def lcut(fp: IO) -> list:
+    '''用于统计文件中的词频，返回词语和词性'''
 
-f = open('C:/Users/zhhony/Desktop/新建文件夹/2000年政府工作报告.log.txt', 'r')
-t = f.read()
-f.close()
+    # 替换文本
+    text = replace_(fp.read(), '和', '的')
 
-
-def lcut(fp: IO) -> pandas.DataFrame:
-    text = replace_(fp.read())
-    wordList = jieba.lcut(text)
-    wordDict = dict()
-    for word in wordList:
-        wordDict.update({word: wordDict.setdefault(word, 0)+1})
-
-    # 按词频降序排序
-    wordDictList = [(key, value) for (key, value) in wordDict.items()]
-    wordDictList.sort(key=lambda x: x[1], reverse=True)
-    wordDict = dict(wordDictList)
-
-    # 封装成dataframe
-    df = pandas.DataFrame(data=wordDict, index=['数值'])
-    df = df.transpose().reset_index()
-    df.columns = ['名词', '数值']
-
-    return df
+    # 切割词语
+    paddle.enable_static()
+    jieba.enable_paddle()
+    return posseg.lcut(text, use_paddle=True)
 
 
-entry = EntryPoint()
-entry.output.dataset = ...
+if __name__ == '__main__':
+
+    LOCAL_USER_PROFILE = os.environ['USERPROFILE']
+
+    path = Path(LOCAL_USER_PROFILE + '/Desktop/新建文件夹')
+
+    # 获取path内的文件
+    fileList = [i for i in path.glob('**/*.txt')]
+
+    # 存储每个文件的词频dataframe
+    fileFrequencyList = []
+    for file in fileList:
+
+        FILE_NAME = file.name
+
+        with open(file=file, mode='r') as f:
+            # 获取词频清单
+            wordFrequency = lcut(f)
+
+        wordDict = dict()
+        for word, flag in wordFrequency:
+            wordDict.update(
+                {word: [wordDict.setdefault(word, [0, flag])[0]+1, flag]})
+
+        # 按词频降序排序
+        wordDictList = [(key, value) for (key, value) in wordDict.items()]
+        wordDictList.sort(key=lambda x: x[1], reverse=True)
+        wordDict = dict(wordDictList)
+
+        # 封装成dataframe
+        df = pandas.DataFrame(data=wordDict)
+        df = df.transpose().reset_index()
+        df.columns = ['词语', '数值', '词性']
+        fileFrequencyList.append(df)
+
+        with pandas.ExcelWriter('abc.xlsx', mode='a') as xlsx:
+            df.to_excel(xlsx, sheet_name=FILE_NAME)
+            xlsx.save()
+
+    print(fileFrequencyList)
