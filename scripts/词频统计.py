@@ -42,7 +42,7 @@ def replace_(text: str, *args) -> str:
     return text
 
 
-def lcut(fp: IO) -> list:
+def lcut_(fp: IO) -> list:
     '''用于统计文件中的词频，返回词语和词性'''
 
     # 替换文本
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
         with open(file=file, mode='r') as f:
             # 获取词频清单
-            wordFrequency = lcut(f)
+            wordFrequency = lcut_(f)
 
         wordDict = dict()
         for word, flag in wordFrequency:
