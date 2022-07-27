@@ -98,7 +98,8 @@ if __name__ == '__main__':
         df.columns = ['关键词', '数值', '词性', '作者', '年份']
         fileFrequencyList.append(df)
 
-    df = pandas.concat(fileFrequencyList)
+    df = pandas.concat(fileFrequencyList).reset_index(drop=True)
 
-    with pandas.ExcelWriter(LOCAL_USER_PROFILE + '/Desktop/'+'abc.xlsx', mode='a') as xlsx:
-        df.to_excel(xlsx, sheet_name='报告词频汇总')
+    entry = EntryPoint()
+    entry.output.dataset = df
+    print(entry.output.dataset)
