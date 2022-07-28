@@ -7,7 +7,6 @@ import paddle
 import re
 from pathlib import Path
 from zhon.hanzi import punctuation
-from yonghong.script.port import EntryPoint, ResourceType
 from typing import *
 
 
@@ -79,7 +78,7 @@ if __name__ == '__main__':
     for file in fileList:
 
         FILE_NAME = file.name
-        FILE_YEAR = int(file.name[:4])
+        FILE_YEAR = file.name[:4] + '-03-01'
 
         with open(file=file, mode='r') as f:
             # 获取词频清单
@@ -103,8 +102,4 @@ if __name__ == '__main__':
         fileFrequencyList.append(df)
 
     df = pandas.concat(fileFrequencyList).reset_index(drop=True)
-    df = df.astype({'数值': 'int64', '年份': 'int64'})
-
-    entry = EntryPoint()
-    entry.output.dataset = df
-    print(entry.output.dataset)
+    df = df.astype({'数值': 'int64', '年份': 'datetime64'})
