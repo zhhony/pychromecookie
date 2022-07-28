@@ -69,8 +69,8 @@ if __name__ == '__main__':
 
     LOCAL_USER_PROFILE = os.environ['USERPROFILE']
 
-    inPath = Path(LOCAL_USER_PROFILE + '/Desktop/新建文件夹')
-    outPath = Path(LOCAL_USER_PROFILE + '/Desktop/输出文件夹')
+    inPath = LOCAL_USER_PROFILE + '/Desktop/新建文件夹/'
+    outPath = LOCAL_USER_PROFILE + '/Desktop/输出文件夹/'
 
     image = cv2.imread(LOCAL_USER_PROFILE + '/Desktop/map_pin.jpg')
 
@@ -79,27 +79,26 @@ if __name__ == '__main__':
                                      max_words=100000, background_color='white', mode='RGBA', relative_scaling=0.5)
 
     # 获取path内的文件
-    fileList = [i for i in inPath.glob('**/*.txt')]
+    fileList = [i for i in Path(inPath).glob('**/*.txt')]
 
     # 存储每个文件的词频dataframe
     fileFrequencyList = []
-    for file in fileList[0:1]:
+    for file in fileList:
 
         FILE_NAME = file.name
-        FILE_YEAR = file.name[:4] + '-03-01'
+        FILE_YEAR = file.name[:4]
 
         with open(file=file, mode='r') as f:
             # 获取词频清单
             wordFrequency = lcut_(f)
 
         flags = list(set([j for i, j in wordFrequency]))
-        word = ' '.join(
-            [i for i, j in wordFrequency if i != '~'])
-        ciyunImage = wordcloud_.generate(word)
-        ciyunImage.to_file('abvv.png')
 
-        # for flag in flags[1:2]:
-        #     word = ' '.join(
-        #         [i for i, j in wordFrequency if i != '~' and(j == flag)])
-        #     ciyunImage = wordcloud_.generate(word)
-        #     ciyunImage.to_file('abvv.png')
+        for flag in flags:
+            word = ' '.join(
+                [i for i, j in wordFrequency if i != '~' and j == flag])
+            ciyunImage = wordcloud_.generate(word)
+
+            if Path(outPath + flag).exists() == False:
+                Path(outPath + flag).mkdir()
+            ciyunImage.to_file(outPath + FLAG[flag] + '/' + FILE_YEAR + '.png')
