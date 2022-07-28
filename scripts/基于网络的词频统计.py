@@ -8,7 +8,8 @@ import re
 from pathlib import Path
 from zhon.hanzi import punctuation
 from typing import *
-
+import wordcloud
+import cv2
 
 pandas.set_option('display.unicode.east_asian_width', True)
 pandas.set_option('display.unicode.ambiguous_as_wide', True)
@@ -68,14 +69,21 @@ if __name__ == '__main__':
 
     LOCAL_USER_PROFILE = os.environ['USERPROFILE']
 
-    path = Path(LOCAL_USER_PROFILE + '/Desktop/新建文件夹')
+    inPath = Path(LOCAL_USER_PROFILE + '/Desktop/新建文件夹')
+    outPath = Path(LOCAL_USER_PROFILE + '/Desktop/输出文件夹')
+
+    image = cv2.imread(LOCAL_USER_PROFILE + '/Desktop/map_pin.jpg')
+
+    color = wordcloud.ImageColorGenerator(image)
+    wordcloud_ = wordcloud.WordCloud(font_path=LOCAL_USER_PROFILE + '/Desktop/simhei.ttf', mask=image, color_func=color, max_font_size=120, repeat=True, min_font_size=2,
+                                     max_words=100000, background_color='white', mode='RGBA', relative_scaling=0.5)
 
     # 获取path内的文件
-    fileList = [i for i in path.glob('**/*.txt')]
+    fileList = [i for i in inPath.glob('**/*.txt')]
 
     # 存储每个文件的词频dataframe
     fileFrequencyList = []
-    for file in fileList:
+    for file in fileList[0:1]:
 
         FILE_NAME = file.name
         FILE_YEAR = file.name[:4] + '-03-01'
@@ -84,22 +92,14 @@ if __name__ == '__main__':
             # 获取词频清单
             wordFrequency = lcut_(f)
 
-        wordDict = dict()
-        for word, flag in wordFrequency:
-            wordDict.update(
-                {word: [wordDict.setdefault(word, [0, flag])[0]+1, flag]})
+        flags = list(set([j for i, j in wordFrequency]))
+        word = ' '.join(
+            [i for i, j in wordFrequency if i != '~'])
+        ciyunImage = wordcloud_.generate(word)
+        ciyunImage.to_file('abvv.png')
 
-        # 按词频降序排序
-        wordDictList = [(keyword, [value[0], FLAG.get(value[1]), AUTHOR.get(
-            FILE_YEAR), FILE_YEAR]) for keyword, value in wordDict.items()]
-        wordDictList.sort(key=lambda x: x[1], reverse=True)
-        wordDict = dict(wordDictList)
-
-        # 封装成dataframe
-        df = pandas.DataFrame(data=wordDict)
-        df = df.transpose().reset_index()
-        df.columns = ['关键词', '数值', '词性', '作者', '年份']
-        fileFrequencyList.append(df)
-
-    df = pandas.concat(fileFrequencyList).reset_index(drop=True)
-    df = df.astype({'数值': 'int64', '年份': 'datetime64'})
+        # for flag in flags[1:2]:
+        #     word = ' '.join(
+        #         [i for i, j in wordFrequency if i != '~' and(j == flag)])
+        #     ciyunImage = wordcloud_.generate(word)
+        #     ciyunImage.to_file('abvv.png')
