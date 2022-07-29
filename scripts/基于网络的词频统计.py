@@ -73,10 +73,10 @@ if __name__ == '__main__':
     inPath = LOCAL_USER_PROFILE + '/Desktop/新建文件夹/'
     outPath = LOCAL_USER_PROFILE + '/Desktop/输出文件夹/'
 
-    image = cv2.imread(LOCAL_USER_PROFILE + '/Desktop/map_pin.jpg')
+    image = cv2.imread('../resource//map_pin.jpg')
 
     color = wordcloud.ImageColorGenerator(image)
-    wordcloud_ = wordcloud.WordCloud(font_path=LOCAL_USER_PROFILE + '/Desktop/simhei.ttf', mask=image, color_func=color, max_font_size=120, repeat=True, min_font_size=2,
+    wordcloud_ = wordcloud.WordCloud(font_path='../resource/simhei.ttf', mask=image, color_func=color, max_font_size=120, repeat=True, min_font_size=2,
                                      max_words=25000, background_color=None, mode='RGBA', relative_scaling=0)
 
     # 获取path内的文件
@@ -94,7 +94,7 @@ if __name__ == '__main__':
             wordFrequency = lcut_(f)
 
         flags = list(set([j for i, j in wordFrequency]))
-        flagReleaseList = ['不及物动词', '动词性语素', '副词', '副动词', '动词', '副形词', '后缀',  '结构助词1', '结构助词2',  '介词', '连词',  '量词',  '前缀', '助词', '名词性语素', '代词', '时间词', '数词', '数量词名词',
+        flagReleaseList = ['不及物动词', '动词性语素', '状态词', '形容词', '人名', '区别词', '简称略称', '方位词', 副词', '副动词', '动词', '副形词', '后缀',  '结构助词1', '结构助词2',  '介词', '连词',  '量词',  '前缀', '助词', '名词性语素', '代词', '时间词', '数词', '数量词名词',
                            '时间词性语素', '时态助词1',  '时态助词2',  '叹词', '形容词性语素', '助词', '字符串',  '副语素', '外语', '语素', '结构助词3', '时态助词3', '其他']
 
         flags = [i for i in flags if FLAG[i] not in flagReleaseList]
