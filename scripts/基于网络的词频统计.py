@@ -10,6 +10,7 @@ from zhon.hanzi import punctuation
 from typing import *
 import wordcloud
 import cv2
+from time import sleep
 
 pandas.set_option('display.unicode.east_asian_width', True)
 pandas.set_option('display.unicode.ambiguous_as_wide', True)
@@ -56,8 +57,8 @@ def lcut_(fp: IO) -> list:
     jieba.enable_paddle()
 
     # 定义展示的词语
-    addList = [('防沙治沙', 'n'), ('新型冠状病毒', 'n'), ('新冠', 'n'), ('换林换草', 'v'), ('平均', 'v'), ('妥善', 'a'), ('成果丰硕', 'a'), ('汪洋大海', 'n'), ('孟中印缅', 'n'), ('陆海统筹', 'n'), ('人命关天', 'a'), ('山水林田湖', 'n'), ('化蛹成蝶', 'v'), ('枝繁叶茂', 'a'),
-               ('十二五', 'n'), ('拥政爱民', 'a'), ('天然林', 'n'), ('退耕还林还草', 'v'), ('惠民生', 'v'), ('蔚然成风', 'a'), ('于法有据', 'a')]
+    addList = [('防沙治沙', 'l'), ('转移支付', 'l'), ('新型冠状病毒', 'l'), ('新冠', 'l'), ('换林换草', 'l'), ('平均', 'v'), ('妥善', 'a'), ('成果丰硕', 'a'), ('汪洋大海', 'n'), ('孟中印缅', 'n'), ('陆海统筹', 'l'), ('人命关天', 'a'), ('山水林田湖', 'l'), ('化蛹成蝶', 'v'), ('枝繁叶茂', 'a'),
+               ('十二五', 'l'), ('拥政爱民', 'a'), ('天然林', 'n'), ('退耕还林还草', 'l'), ('惠民生', 'v'), ('蔚然成风', 'a'), ('于法有据', 'a')]
     for x, y in addList:
         jieba.suggest_freq(x, tune=True)
         jieba.add_word(word=x, tag=y)
@@ -76,7 +77,7 @@ if __name__ == '__main__':
 
     color = wordcloud.ImageColorGenerator(image)
     wordcloud_ = wordcloud.WordCloud(font_path=LOCAL_USER_PROFILE + '/Desktop/simhei.ttf', mask=image, color_func=color, max_font_size=120, repeat=True, min_font_size=2,
-                                     max_words=100000, background_color='white', mode='RGBA', relative_scaling=0.5)
+                                     max_words=25000, background_color=None, mode='RGBA', relative_scaling=0)
 
     # 获取path内的文件
     fileList = [i for i in Path(inPath).glob('**/*.txt')]
@@ -93,12 +94,18 @@ if __name__ == '__main__':
             wordFrequency = lcut_(f)
 
         flags = list(set([j for i, j in wordFrequency]))
+        flagReleaseList = ['不及物动词', '动词性语素', '副词', '副动词', '动词', '副形词', '后缀',  '结构助词1', '结构助词2',  '介词', '连词',  '量词',  '前缀', '助词', '名词性语素', '代词', '时间词', '数词', '数量词名词',
+                           '时间词性语素', '时态助词1',  '时态助词2',  '叹词', '形容词性语素', '助词', '字符串',  '副语素', '外语', '语素', '结构助词3', '时态助词3', '其他']
+
+        flags = [i for i in flags if FLAG[i] not in flagReleaseList]
 
         for flag in flags:
             word = ' '.join(
                 [i for i, j in wordFrequency if i != '~' and j == flag])
             ciyunImage = wordcloud_.generate(word)
 
-            if Path(outPath + flag).exists() == False:
-                Path(outPath + flag).mkdir()
+            if Path(outPath + FLAG[flag]).exists() == False:
+                Path(outPath + FLAG[flag]).mkdir()
             ciyunImage.to_file(outPath + FLAG[flag] + '/' + FILE_YEAR + '.png')
+            sleep(1.5)
+        sleep(1)
