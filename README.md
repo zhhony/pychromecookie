@@ -1,8 +1,10 @@
 # pychromecookie
 
-## modules模组文件夹（获取cookie，解密cookie、输出cookie、下载文件）
+## <font color = blue>modules</font>模组文件夹
 
-### conn.py
+获取cookie，解密cookie、输出cookie、下载文件
+
+### <font color = red>conn.py</font>
 
 用于定义针对SQlite数据库的上下文管理器，可以调用with语句方便管理数据库连接。
 
@@ -22,7 +24,7 @@
     # 上述范例是一个从指定位置获取cookie的完整过程。最终所返回的valCookiesWithEncode是一个多维列表，存储了cookie的若干参数，比如有效时间、域名、key、value等。需要注意的是，这里获取的value是加密的。
     ```
 
-### decode.py
+### <font color = red>decode.py</font>
 
 用于获取密钥、以及解开被加密的cookie参数。有如下函数：
 
@@ -38,7 +40,7 @@
     value = DecodeValue('!@#$%%^^&$', key)
     ```
 
-### cookie.py
+### <font color = red>cookie.py</font>
 
 用于生成cookie文件。需提供解密后的cookie内容。
 
@@ -55,7 +57,7 @@
         cookies.getOutFile()
     ```
 
-### download.py
+### <font color = red>download.py</font>
 
 用于下载文件。
 
@@ -66,20 +68,22 @@
 
   - run    建立一个执行下载任务的线程；
 
-## resource资源文件夹（一些参数）
+## <font color = blue>resource</font>资源文件夹
 
-### config
+存储一些参数
+
+### <font color = red>config</font>
 
 这是生成cookie的必要配置文件。从chrome获取的cookie共5个参数，但是实际生成cookie需要7个，额外的2个存在这里。参数值是bool形式的，具体是True还是False是试出来的，目前没找到这俩参数的含义和规律。
 
-### map_pin.jpg
+### <font color = red>map_pin.jpg</font>
 
 这是衍生工程，中国政府词频报告所用的模板，可以无视。
 
-### simhei.ttf
+### <font color = red>simhei.ttf</font>
 
 这是衍生工程，中国政府词频报告所用的字体，可以无视。
 
-## scripts脚本文件夹
+## <font color = blue>scripts</font>脚本文件夹
 
-<font color = red>这里放的是一些衍生的工程</font>
+放的是一些衍生工程
