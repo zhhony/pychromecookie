@@ -4,7 +4,7 @@
 
 ### conn.py
 
-用于定义针对SQlite数据库的上下文连接器，可以调用with语句方便管理数据库连接。
+用于定义针对SQlite数据库的上下文管理器，可以调用with语句方便管理数据库连接。
 
 - **Conn类**    继承自sqlite3.Connection类，需指定SQlite文件`Cookies`的位置。如果是windows系统一般默认放在 `%LOCALAPPDATA%`内的 `\Google\Chrome\User Data\Default\network\`文件夹下。具备两个内置方法：
 
@@ -59,12 +59,10 @@
 
 用于下载文件。
 
-- **Downunit类**
-用于实现下载文件的类，依托于DownThread类。需要指定资源路径，输出文件的路径和名称，以及需要启用的线程数量（默认为3）。有如下方法：
+- **Downunit类**    实现文件下载的类，依托于DownThread类。需要指定资源路径，输出文件的路径和名称，以及需要启用的线程数量（默认为3）。有如下方法：
 
   - Download    执行下载任务；
 
-- **DownThread类**
-用于实现派送线程任务的类。有如下方法：
+- **DownThread类**    实现派送线程任务的类。有如下方法：
 
   - run    建立一个执行下载任务的线程；
