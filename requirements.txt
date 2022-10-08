@@ -1,0 +1,16 @@
+autopep8==1.7.0
+beautifulsoup4==4.11.1
+bs4==0.0.1
+cffi==1.15.1
+cryptography==38.0.1
+numpy==1.23.3
+pandas==1.5.0
+pycodestyle==2.9.1
+pycparser==2.21
+python-dateutil==2.8.2
+pytz==2022.4
+pywin32==304
+six==1.16.0
+soupsieve==2.3.2.post1
+toml==0.10.2
+zhon==1.1.5

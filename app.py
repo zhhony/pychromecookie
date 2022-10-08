@@ -8,7 +8,6 @@ import os
 import re
 import pandas
 from bs4 import *
-from py_test_tools import *
 
 
 pandas.set_option('display.unicode.east_asian_width', True)
